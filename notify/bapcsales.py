@@ -1,21 +1,23 @@
 import praw
 import time
 from datetime import datetime
-import winsound
+#import winsound
 #import threading
 #import smtplib
 #from email.mime.text import MIMEText
 #from email.MIMEMultipart import MIMEMultipart
 #from email.MIMEText import MIMEText
+#import tweepy
 
 """
 Todo:
 
 Add filters
-Twitter bot
 
 """
+
 #input your own account API token info
+
 reddit = praw.Reddit(client_id='___________',
                      client_secret="____________",
                      refresh_token="____________",
@@ -23,9 +25,26 @@ reddit = praw.Reddit(client_id='___________',
                      user_agent="__________",
                      username="__________")
 
+"""
+client_id='___________'
+client_secret="____________",
+refresh_token="____________"
+password="__________"
+user_agent="__________"
+username="__________")
+"""
+
+
 subreddit = reddit.subreddit('buildapcsales')
-#new_post=next(subreddit.new())bapcsales.py
+
+#profile= reddit.subreddit('u_'+ 'username')
+
+
+#new_post=next(subreddit.new())
 cache={} #submission id:karma count
+
+
+
 
 def old_checker(post1,post2):
     """
@@ -57,7 +76,7 @@ def notification(post):
     email, text, popup notifications
     """
     local_notification(post)
-
+    profile_notification(post)
     """
     score=post.score
     ratio=post.upvote_ratio
@@ -72,7 +91,15 @@ def notification(post):
     print('----------------------------------------------------------------')
     """
 
+def profile_notification(post):
+    title=post.title
+    body=post.url
+    profile.submit(title , url= body)
+    """
+    profile.submit(title, text= )
+    """
 
+"""
 def email_notification(post):
 
     def sendemail(from_addr,
@@ -104,13 +131,15 @@ def email_notification(post):
           message      = 'Howdy from a python function',
           login        = 'pythonuser',
           password     = 'XXXXX')
+"""
+
 
 def local_notification(post):
     score=post.score
     ratio=post.upvote_ratio
     cache[post.id]=score
     title=post.title
-    winsound.Beep(2500,1000)
+    #winsound.Beep(2500,1000)
     print('reddit.com'+post.permalink)
     print(price_scrubber(title)+ ' || '+title)
     print('karma count: '+str(score) + ' || upvote %: ' +str(int(ratio*100)))
@@ -171,7 +200,7 @@ def scanner():
         curr_id=curr.id
 
         if curr_id in cache:
-            if curr.score-cache[curr_id]>2 and curr.score>2 and not (post.link_flair_text='Out Of Stock' or post.over_18==True):
+            if curr.score-cache[curr_id]>2 and curr.score>2 and not (post.link_flair_text=='Out Of Stock' or post.over_18==True):
                 notification(curr)
         elif good_deal_check(curr):
             if curr_id not in cache or cache[curr_id]<curr.score:
