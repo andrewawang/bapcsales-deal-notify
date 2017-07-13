@@ -15,7 +15,6 @@ Todo:
 Add filters
 
 """
-
 #input your own account API token info
 
 reddit = praw.Reddit(client_id='___________',
@@ -24,16 +23,6 @@ reddit = praw.Reddit(client_id='___________',
                      password="__________",
                      user_agent="__________",
                      username="__________")
-
-"""
-client_id='___________'
-client_secret="____________",
-refresh_token="____________"
-password="__________"
-user_agent="__________"
-username="__________")
-"""
-
 
 subreddit = reddit.subreddit('buildapcsales')
 
@@ -76,7 +65,7 @@ def notification(post):
     email, text, popup notifications
     """
     local_notification(post)
-    profile_notification(post)
+    #profile_notification(post)
     """
     score=post.score
     ratio=post.upvote_ratio
@@ -200,7 +189,7 @@ def scanner():
         curr_id=curr.id
 
         if curr_id in cache:
-            if curr.score-cache[curr_id]>2 and curr.score>2 and not (post.link_flair_text=='Out Of Stock' or post.over_18==True):
+            if curr.score-cache[curr_id]>2 and curr.score>2 and not (curr.link_flair_text=='Out Of Stock' or curr.over_18==True):
                 notification(curr)
         elif good_deal_check(curr):
             if curr_id not in cache or cache[curr_id]<curr.score:
